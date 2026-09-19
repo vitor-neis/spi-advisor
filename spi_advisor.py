@@ -91,7 +91,7 @@ def calcular_recomendacao(respostas):
     # Avaliação de Turnover
     if respostas['turnover'] == 'Alto (Forte necessidade de reter conhecimento)':
         scores['CMMI'] += 2
-        scores['MPS.BR'] += 2
+        scores['MPS.BR'] -= 1
     else:
         scores['ISO/IEC 15504'] += 2
         scores['ISO/IEC 330xx'] += 2
