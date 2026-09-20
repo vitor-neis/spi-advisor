@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime
 
-# Configuração do Streamlit
 st.set_page_config(
     page_title="SPI-Advisor",
     page_icon="🧭",
@@ -11,7 +10,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Ajustes visuais via CSS
 st.markdown("""
     <style>
     .stButton>button {
@@ -32,7 +30,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Controle de estado para navegação entre telas
 if 'etapa' not in st.session_state:
     st.session_state.etapa = 'formulario'
 
@@ -48,7 +45,6 @@ def obter_justificativa(modelo):
 def calcular_recomendacao(respostas):
     scores = {'CMMI': 0, 'ISO/IEC 15504': 0, 'ISO/IEC 330xx': 0, 'MPS.BR': 0}
 
-    # Avaliação de Porte
     if respostas['porte'] == 'PME (até 100 colaboradores)':
         scores['MPS.BR'] += 3
         scores['ISO/IEC 15504'] += 1
@@ -59,7 +55,6 @@ def calcular_recomendacao(respostas):
         scores['ISO/IEC 15504'] += 2
         scores['ISO/IEC 330xx'] += 2
 
-    # Avaliação de Setor
     if respostas['setor'] == 'Altamente Regulado (Saúde, Finanças, Automóvel)':
         scores['CMMI'] += 4
         scores['ISO/IEC 15504'] += 4
@@ -68,7 +63,6 @@ def calcular_recomendacao(respostas):
         scores['MPS.BR'] += 3
         scores['CMMI'] += 1
 
-    # Avaliação de Mercado
     if respostas['mercado'] == 'Nacional (Brasil)':
         scores['MPS.BR'] += 4
         scores['CMMI'] -= 1
@@ -78,7 +72,6 @@ def calcular_recomendacao(respostas):
         scores['ISO/IEC 330xx'] += 3
         scores['MPS.BR'] -= 3
 
-    # Avaliação de Recursos
     if respostas['recursos'] == 'Baixo (Equipe enxuta, orçamento restrito)':
         scores['CMMI'] -= 10
         scores['MPS.BR'] += 5
@@ -88,7 +81,6 @@ def calcular_recomendacao(respostas):
         scores['ISO/IEC 15504'] += 2
         scores['ISO/IEC 330xx'] += 2
 
-    # Avaliação de Turnover
     if respostas['turnover'] == 'Alto (Forte necessidade de reter conhecimento)':
         scores['CMMI'] += 2
         scores['MPS.BR'] -= 1
@@ -96,7 +88,6 @@ def calcular_recomendacao(respostas):
         scores['ISO/IEC 15504'] += 2
         scores['ISO/IEC 330xx'] += 2
 
-    # Avaliação de Práticas Ágeis
     if respostas['agile'] == 'Avançado (CI/CD, DevOps, Integração Contínua)':
         scores['CMMI'] -= 3
         scores['ISO/IEC 330xx'] += 3
@@ -156,7 +147,6 @@ def gerar_grafico_radar(modelos_recomendados, respostas):
     )
     return fig
 
-# Fluxo principal de telas
 if st.session_state.etapa == 'formulario':
     
     st.title("SPI-Advisor")
@@ -202,13 +192,13 @@ elif st.session_state.etapa == 'resultado':
     st.markdown("---")
     
     if len(modelos_vencedores) > 1:
-        st.warning(f"## ⚖️ Empate Estratégico: {' e '.join(modelos_vencedores)}")
+        st.warning(f"Empate Estratégico: {' e '.join(modelos_vencedores)}")
         st.markdown("Seu cenário organizacional apresenta um equilíbrio entre as exigências e os benefícios destes modelos. A decisão final dependerá de prioridades de longo prazo da gestão.")
         for m in modelos_vencedores:
             st.markdown(obter_justificativa(m))
     else:
         modelo_recomendado = modelos_vencedores[0]
-        st.success(f"## 🏆 Recomendação Primária: {modelo_recomendado}")
+        st.success(f"Recomendação Primária: {modelo_recomendado}")
         st.markdown(obter_justificativa(modelo_recomendado))
         
     st.markdown("<br>", unsafe_allow_html=True)
@@ -245,7 +235,7 @@ Ranking Completo:
     relatorio_texto += "\nNota: Pontuações negativas indicam restrições severas entre o contexto da empresa e as exigências do modelo."
 
     st.download_button(
-        label="📥 Fazer Download do Parecer (.txt)",
+        label="Fazer Download do Parecer (.txt)",
         data=relatorio_texto,
         file_name="parecer_spi_advisor.txt",
         mime="text/plain",
