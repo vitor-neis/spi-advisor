@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["streamlit", "run", "spi_advisor_2.py", "--server.port", "8000", "--server.address", "0.0.0.0"]
+CMD ["streamlit", "run", "spi_advisor.py", "--server.port", "8000", "--server.address", "0.0.0.0"]
